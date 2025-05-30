@@ -147,7 +147,7 @@ function App() {
 
         const firstDate = new Date(data[0].date);
         const lastDate = new Date(data[data.length - 1].date);
-        setCurrentPeriod(\`\${firstDate.toLocaleDateString()} – \${lastDate.toLocaleDateString()}\`);
+       setCurrentPeriod(`${firstDate.toLocaleDateString()} - ${lastDate.toLocaleDateString()}`);
 
         setDepartmentSales(calculateDepartmentSales(data));
         setCustomerSales(calculateCustomerSales(data));
