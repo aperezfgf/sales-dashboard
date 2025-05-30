@@ -223,6 +223,8 @@ insights.push(`Average profit margin is low: ${cleanedMargin}%. Consider reviewi
       <ExportButtons data={salesData} />
       <InsightBox insights={insights} />
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+
     
             <MetricCard title="Total Sales" value={formatCurrency(salesData.reduce((acc, s) => acc + s.sales, 0))} />
             <MetricCard title="Total Profit" value={formatCurrency(salesData.reduce((acc, s) => acc + s.profit, 0))} />
@@ -233,7 +235,7 @@ insights.push(`Average profit margin is low: ${cleanedMargin}%. Consider reviewi
           <div className="mb-6 max-h-64 overflow-y-scroll">
             <AlertsList alerts={alerts} />
           </div>
- const totalProfit = salesData.reduce((acc, s) =>
+          const totalProfit = salesData.reduce((acc, s) =>
   acc + parseFloat(typeof s.profit === "string" ? s.profit.replace("%", "").trim() : s.profit), 0);
 
 const totalSales = salesData.reduce((acc, s) =>
@@ -241,6 +243,10 @@ const totalSales = salesData.reduce((acc, s) =>
 
 const avgMargin = totalSales !== 0 ? (totalProfit / totalSales) * 100 : 0;
 const cleanedMargin = isNaN(avgMargin) ? "0.0%" : `${avgMargin.toFixed(1)}%`;
+
+ 
+
+
          
 return (
   <>
