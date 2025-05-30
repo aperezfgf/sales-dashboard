@@ -226,29 +226,30 @@ insights.push(`Average profit margin is low: ${cleanedMargin}%. Consider reviewi
     
             <MetricCard title="Total Sales" value={formatCurrency(salesData.reduce((acc, s) => acc + s.sales, 0))} />
             <MetricCard title="Total Profit" value={formatCurrency(salesData.reduce((acc, s) => acc + s.profit, 0))} />
-            <MetricCard
-  title="Average Profit Margin"
-  value={() => {
-    const totalProfit = salesData.reduce((acc, s) => acc + parseFloat(typeof s.profit === "string" ? s.profit.replace("%", "").trim() : s.profit), 0);
-    const totalSales = salesData.reduce((acc, s) => acc + parseFloat(typeof s.sales === "string" ? s.sales.replace("%", "").trim() : s.sales), 0);
-    const avg = totalSales !== 0 ? (totalProfit / totalSales) * 100 : 0;
-    return `${avg.toFixed(1)}%`;
-  }}
-/>
+            <MetricCard title="Average Profit Margin" value={cleanedMargin} />
+
 
 
           <div className="mb-6 max-h-64 overflow-y-scroll">
             <AlertsList alerts={alerts} />
           </div>
+ const totalProfit = salesData.reduce((acc, s) =>
+  acc + parseFloat(typeof s.profit === "string" ? s.profit.replace("%", "").trim() : s.profit), 0);
 
-          {/* Add filters, dynamic chart types, etc. here */}
-          <DashboardCard title="Sales by Department" data={departmentSales} chartType="bar" />
-          <DashboardCard title="Sales by Customer" data={customerSales} chartType="bar" />
-          <DashboardCard title="Sales by Product" data={productSales} chartType="bar" />
-        </>
-      )}
-    </div>
-  );
+const totalSales = salesData.reduce((acc, s) =>
+  acc + parseFloat(typeof s.sales === "string" ? s.sales.replace("%", "").trim() : s.sales), 0);
+
+const avgMargin = totalSales !== 0 ? (totalProfit / totalSales) * 100 : 0;
+const cleanedMargin = isNaN(avgMargin) ? "0.0%" : `${avgMargin.toFixed(1)}%`;
+         
+return (
+  <>
+    <DashboardCard title="Sales by Department" data={departmentSales} chartType="bar" />
+    <DashboardCard title="Sales by Customer" data={customerSales} chartType="bar" />
+    <DashboardCard title="Sales by Product" data={productSales} chartType="bar" />
+  </>
+);
+
 }
 
 export default App;
