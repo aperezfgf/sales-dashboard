@@ -235,7 +235,8 @@ insights.push(`Average profit margin is low: ${cleanedMargin}%. Consider reviewi
           <div className="mb-6 max-h-64 overflow-y-scroll">
             <AlertsList alerts={alerts} />
           </div>
-          const totalProfit = salesData.reduce((acc, s) =>
+             
+const totalProfit = salesData.reduce((acc, s) =>
   acc + parseFloat(typeof s.profit === "string" ? s.profit.replace("%", "").trim() : s.profit), 0);
 
 const totalSales = salesData.reduce((acc, s) =>
@@ -244,10 +245,6 @@ const totalSales = salesData.reduce((acc, s) =>
 const avgMargin = totalSales !== 0 ? (totalProfit / totalSales) * 100 : 0;
 const cleanedMargin = isNaN(avgMargin) ? "0.0%" : `${avgMargin.toFixed(1)}%`;
 
- 
-
-
-         
 return (
   <>
     <DashboardCard title="Sales by Department" data={departmentSales} chartType="bar" />
@@ -255,7 +252,6 @@ return (
     <DashboardCard title="Sales by Product" data={productSales} chartType="bar" />
   </>
 );
-
 }
 
 export default App;
