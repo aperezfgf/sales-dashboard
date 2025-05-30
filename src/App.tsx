@@ -112,13 +112,13 @@ function App() {
       const prev = months[months.length - 2];
       const diff = salesByMonth[last] - salesByMonth[prev];
       const pct = (diff / salesByMonth[prev]) * 100;
-      insights.push(`Sales ${diff > 0 ? 'increased' : 'decreased'} ${pct.toFixed(1)}% compared to last month.`);
+      const cleanedPct = isNaN(pct) ? 0 : parseFloat(pct.toFixed(1));
+insights.push(`Sales ${diff > 0 ? 'increased' : 'decreased'} ${cleanedPct}% compared to last month.`);
     }
-
     const avgMargin = data.reduce((acc, r) => acc + (r.profit / r.sales), 0) / data.length;
     if (avgMargin < 0.15) {
-      insights.push(`Average profit margin is low: ${(avgMargin * 100).toFixed(1)}%. Consider reviewing product pricing.`);
-    }
+      const cleanedMargin = isNaN(avgMargin) ? 0 : parseFloat((avgMargin * 100).toFixed(1));
+insights.push(`Average profit margin is low: ${cleanedMargin}%. Consider reviewing product pricing.`);
 
     const lowProfitProducts = data.filter(r => (r.profit / r.sales) < 0.1);
     if (lowProfitProducts.length > 5) {
@@ -226,8 +226,16 @@ function App() {
     
             <MetricCard title="Total Sales" value={formatCurrency(salesData.reduce((acc, s) => acc + s.sales, 0))} />
             <MetricCard title="Total Profit" value={formatCurrency(salesData.reduce((acc, s) => acc + s.profit, 0))} />
-            <MetricCard title="Average Profit Margin" value={((salesData.reduce((acc, s) => acc + s.profit, 0) / salesData.reduce((acc, s) => acc + s.sales, 0)) * 100).toFixed(1) + "%"} />
-          </div>
+            <MetricCard
+  title="Average Profit Margin"
+  value={() => {
+    const totalProfit = salesData.reduce((acc, s) => acc + parseFloat(typeof s.profit === "string" ? s.profit.replace("%", "").trim() : s.profit), 0);
+    const totalSales = salesData.reduce((acc, s) => acc + parseFloat(typeof s.sales === "string" ? s.sales.replace("%", "").trim() : s.sales), 0);
+    const avg = totalSales !== 0 ? (totalProfit / totalSales) * 100 : 0;
+    return `${avg.toFixed(1)}%`;
+  }}
+/>
+
 
           <div className="mb-6 max-h-64 overflow-y-scroll">
             <AlertsList alerts={alerts} />
